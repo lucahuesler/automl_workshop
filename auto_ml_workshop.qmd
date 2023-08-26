@@ -135,7 +135,7 @@ x <- setdiff(colnames(kgwr_residential_train_h2o), y)
 aml_energy_source <- h2o.automl(y = y,
                                 x = x,
                                 training_frame = train,
-                                max_runtime_secs = 600)
+                                max_runtime_secs = 10)
 ```
 
 ```{r}
