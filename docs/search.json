@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "automl_workshop_slides.html#automl-publications",
+    "href": "automl_workshop_slides.html#automl-publications",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "What is automated machine learning?",
+    "text": "What is automated machine learning?\n\nA schematic for the typical modeling process (Silge & Kuhn, 2023).\nSo what exactly is AutoML? A good way to understand it is maybe to have a look at a typical modelling process: Let’s say you have a specific use case at hand - lets say you forgot to ask who wants a vegetarian dinner for lunch and you should now predict it as good as possible based on the info from the participants. So you start to explore your data, you may have a look at age or gender, you may create new features that could give a hint to eating preferences of the people and you start to build some models. But which algorithm should you use? Maybe just linear regression that the cook will understand your prediction? Maybe something new and fancy like a gradient boosting? You start building and comparing algorithms but then you realize that you made an error with the newly calculated features and you have a wrong encoding somewhere…so before you come up with a final model, people actually just left for a nearby restaurant.\nSo as you can see, building a prediction or classification model can be very time-consuming."
+  },
+  {
+    "objectID": "automl_workshop_slides.html#what-is-automated-machine-learning",
+    "href": "automl_workshop_slides.html#what-is-automated-machine-learning",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "What is automated machine learning?",
+    "text": "What is automated machine learning?\n\n2020 State of Data Science (Anaconda Report)"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#what-is-automated-machine-learning-1",
+    "href": "automl_workshop_slides.html#what-is-automated-machine-learning-1",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "What is automated machine learning?",
+    "text": "What is automated machine learning?\nAutoML.org (p. 136):\n“AutoML aims to provide effective off-the-shelf learning systems to free experts and non-experts alike from the tedious and time-consuming tasks of selecting the right algorithm for a dataset at hand, along with the right preprocessing method and the various hyperparameters of all involved components.”\n\nAutoML.org is one of the main players in academia for AutoML. And they give the following definition in their book. They define it as a toolset of methods and processes that makes ML actually available for non-experts."
+  },
+  {
+    "objectID": "automl_workshop_slides.html#what-is-automated-machine-learning-2",
+    "href": "automl_workshop_slides.html#what-is-automated-machine-learning-2",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "What is automated machine learning?",
+    "text": "What is automated machine learning?\n\n\nThis graph shows the number of publications on the topic"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#and-why-use-it",
+    "href": "automl_workshop_slides.html#and-why-use-it",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "…and why use it?",
+    "text": "…and why use it?\nThere is no single best algorithm"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#what-is-h2o",
+    "href": "automl_workshop_slides.html#what-is-h2o",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "What is H2O",
+    "text": "What is H2O\nMachine learning platform that is:\n\nOpen Source\nDistributed (training is done in a cluster, not in R or Python environment, not really relevant if you work in a local machine)\nWritten in Java (speed)"
+  }
+]

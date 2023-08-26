@@ -2,6 +2,7 @@ project:
   title: "auto_ml_workshop"
   type: website
   output-dir: docs
-  
+  render:
+    - "automl_workshop_slides.qmd"
 editor: visual
 
