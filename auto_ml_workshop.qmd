@@ -1,0 +1,151 @@
+---
+title: "auto_ml_workshop"
+---
+
+# Automated Machine Learning with R and h2o
+
+Workshop 3 (HS120) \@ Swiss Days of Official Statistics, 30.08.2023-01.09.2023, Universität Basel
+
+## What is automated machine learning and why use it?
+
+There is no single best algorithm
+
+## What is H2O
+
+Machine learning platform that is:
+
+-   Open Source
+-   Distributed (training is done in a cluster, not in R or Python environment, not really relevant if you work in a local machine)
+-   Written in Java (speed)
+-   API's available for R, Python, Web GUI, etc.
+
+```{r}
+library(tidyverse, warn.conflicts = FALSE)
+library(h2o, warn.conflicts = FALSE)
+```
+
+## Get the data
+
+We will use an OGD-Dataset for this workshop, available at [data.bl.ch](https://data.bl.ch/explore/dataset/12160/table). The data contains all the publicly available information of buildings in the Canton of Basel-Landschaft.
+
+```{r}
+kgwr <- read_delim("https://data.bl.ch/api/explore/v2.1/catalog/datasets/12160/exports/csv?lang=de&timezone=Europe%2FParis&use_labels=true&delimiter=%3B", delim = ";")
+```
+
+## Explorative analysis
+
+## Cleaning and transformation
+
+We focus on existing residential buildings only:
+
+```{r}
+kgwr_residential <- kgwr |>
+  filter(gebaeudekategorie_bezeichnung == "Gebäude mit ausschliesslicher Wohnnutzung",
+         gebaeudestatus_bezeichnung == "Bestehend")
+```
+
+We create a new variable where energy sources are grouped:
+
+```{r}
+kgwr_residential <- kgwr_residential %>%
+  mutate(energie_waermequelle_heizung_primaer_gruppiert = case_when(
+    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Elektrizität") ~ "Electricity",
+    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Erdregister", "Erdwärme (generisch)", "Erdwärmesonde", "Wasser", "Luft") ~ "Geothermal",
+    energie_waermequelle_heizung_primaer_bezeichnung == "Fernwärme (generisch)" ~ "District Heating",
+    energie_waermequelle_heizung_primaer_bezeichnung == "Gas" ~ "Gas",
+    energie_waermequelle_heizung_primaer_bezeichnung == "Heizöl" ~ "Oil",
+    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Holz (Pellets)", "Holz (Schnitzel)", "Holz (Stückholz)", "Holz (generisch)") ~ "Wood",
+    energie_waermequelle_heizung_primaer_bezeichnung == "Sonne (thermisch)" ~ "Solar",
+    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Unbestimmt", "Keine") ~ "Undefined",
+    energie_waermequelle_heizung_primaer_bezeichnung == "Wasser (Grundwasser, Oberflächenwasser, Abwasser)" ~ "Water",
+    energie_waermequelle_heizung_primaer_bezeichnung == "Andere" ~ "Other",
+    TRUE ~ "Other"
+  ))
+```
+
+```{r}
+kgwr_residential %>%
+  count(energie_waermequelle_heizung_primaer_gruppiert) %>%
+  ggplot(aes(x = energie_waermequelle_heizung_primaer_gruppiert, y = n)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Distribution of Primary Heating Systems", 
+       x = "Primary Heating System", 
+       y = "Number of Buildings") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Train models
+
+Our goal is to predict the energy source of buildings with missing information (= "Undefined"). For the training data, we filter out these buildings:
+
+```{r}
+kgwr_residential_train <- kgwr_residential |>
+  filter(energie_waermequelle_heizung_primaer_gruppiert != "Undefined")
+```
+
+Now, we can select the variables that potentially contain information about the heating system:
+
+```{r}
+kgwr_residential_train <- kgwr_residential_train |>
+  select(energie_waermequelle_heizung_primaer_gruppiert,
+         gemeindename, 
+         e_gebaeudekoordinate, 
+         n_gebaeudekoordinate, 
+         gebaeudeklasse_code, 
+         baujahr_des_gebaeudes,
+         gebaeudeflaeche,
+         anzahl_geschosse) |>
+  mutate(energie_waermequelle_heizung_primaer_gruppiert = as_factor(energie_waermequelle_heizung_primaer_gruppiert),
+         gemeindename = as_factor(gemeindename))
+  
+```
+
+```{r}
+# Initialize the H2O-3 cluster
+h2o.init()
+
+
+# convert to H2O frame
+kgwr_residential_train_h2o <- as.h2o(kgwr_residential_train)
+
+# Split your data into 3 and save into variable "splits"
+splits <- h2o.splitFrame(kgwr_residential_train_h2o, c(0.8), seed = 42)
+
+# Extract all 3 splits into train, valid and test
+train <- splits[[1]]
+test  <- splits[[2]]
+
+# Check the dimensions of both sets
+dim(train)
+dim(test)
+```
+
+## Run AutoML
+
+```{r}
+
+# target
+y <- "energie_waermequelle_heizung_primaer_gruppiert"
+
+# predictors
+x <- setdiff(colnames(kgwr_residential_train_h2o), y)
+
+# run automl
+aml_energy_source <- h2o.automl(y = y,
+                                x = x,
+                                training_frame = train,
+                                max_runtime_secs = 600)
+```
+
+```{r}
+# View the AutoML Leaderboard
+lb <- h2o.get_leaderboard(aml_energy_source, extra_columns = "ALL")
+h2o.head(lb, n = 25)
+```
+
+```{r}
+# Save the test performance of the leader model
+aml_cl_test_perf <- h2o.performance(aml_energy_source@leader, test)
+aml_cl_test_perf
+```

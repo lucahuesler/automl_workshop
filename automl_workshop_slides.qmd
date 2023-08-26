@@ -1,0 +1,73 @@
+---
+title: "Automated Machine Learning with R and h2o"
+subtitle: "Workshop 3 @ Swiss Statistics Meeting, 30.08.2023, Universität Basel"
+author: Luca Hüsler
+institute: "Amt für Daten und Statistik BL"
+format: 
+   revealjs:
+     logo: figures/afds_logo.png
+     css: logo.css
+     slide-number: true
+     show-slide-number: all
+     preview-links: auto
+     width: 1280
+     height: 720
+     theme: default
+     df-print: paged
+     
+# global definition of code chunk execution
+execute:
+  eval: true
+  echo: false
+  include: true
+  cache: true
+  warning: false
+---
+
+# Outline
+
+# What is AutoML?
+
+## What is automated machine learning? {#automl-publications}
+
+[![A schematic for the typical modeling process (Silge & Kuhn, 2023).](figures/modelling-process.png){fig-align="center"}](https://www.tmwr.org/software-modeling)
+
+::: notes
+So what exactly is AutoML? A good way to understand it is maybe to have a look at a typical modelling process: Let's say you have a specific use case at hand - lets say you forgot to ask who wants a vegetarian dinner for lunch and you should now predict it as good as possible based on the info from the participants. So you start to explore your data, you may have a look at age or gender, you may create new features that could give a hint to eating preferences of the people and you start to build some models. But which algorithm should you use? Maybe just linear regression that the cook will understand your prediction? Maybe something new and fancy like a gradient boosting? You start building and comparing algorithms but then you realize that you made an error with the newly calculated features and you have a wrong encoding somewhere...so before you come up with a final model, people actually just left for a nearby restaurant.
+
+So as you can see, building a prediction or classification model can be very time-consuming.
+:::
+
+## What is automated machine learning?
+
+[![2020 State of Data Science (Anaconda Report)](figures/anaconda_report_2022.png){fig-align="center"}](https://www.anaconda.com/resources/whitepapers/state-of-data-science-2020)
+
+## What is automated machine learning?
+
+[AutoML.org (p. 136):](https://www.automl.org/book/ "AutoML.org")
+
+| *"AutoML aims to provide effective off-the-shelf learning systems to free experts and non-experts alike from the tedious and time-consuming tasks of selecting the right algorithm for a dataset at hand, along with the right preprocessing method and the various hyperparameters of all involved components."*
+
+::: notes
+AutoML.org is one of the main players in academia for AutoML. And they give the following definition in their book. They define it as a toolset of methods and processes that makes ML actually available for non-experts.
+:::
+
+## What is automated machine learning?
+
+![](figures/automl_publications.png){fig-align="center" width="1300"}
+
+::: notes
+This graph shows the number of publications on the topic
+:::
+
+## ...and why use it?
+
+There is no single best algorithm
+
+## What is H2O
+
+Machine learning platform that is:
+
+-   Open Source
+-   Distributed (training is done in a cluster, not in R or Python environment, not really relevant if you work in a local machine)
+-   Written in Java (speed)
