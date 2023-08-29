@@ -2,11 +2,13 @@
 title: "auto_ml_workshop"
 ---
 
-# Automated Machine Learning with R and h2o -Exercises
+# Automated Machine Learning with R and h2o - Practice
 
 Workshop 3 (HS120) \@ Swiss Days of Official Statistics, 30.08.2023-01.09.2023, Universität Basel
 
 ## Load libraries
+
+We need the following two libraries:
 
 ```{r}
 library(tidyverse)

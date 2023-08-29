@@ -6,7 +6,7 @@ institute: "Amt für Daten und Statistik BL"
 format: 
    revealjs:
      logo: figures/BL_Logo_FKD_AfDuS_A_r_rgb.png
-     #css: logo.css
+     css: logo.css
      slide-number: true
      incremental: false
      show-slide-number: all
@@ -25,23 +25,43 @@ execute:
   warning: false
 ---
 
-# Outline
+## General info
 
--   General Info (Setup)
+-   Internet:
 
--   Theoretical Part (ca. 20 Min)
+    -   Connect to unibas-visitor on your laptop
 
-    -   What is automated machine learning (AutoML) and why use it?
+    -   Open browser and follow the instructions (SMS authentication)
 
-    -   What is H2O?
+    -   ...or use your phone as a hotspot
 
-    -   Code examples
+-   Slides: [https://lucahuesler.github.io/automl_workshop](https://lucahuesler.github.io/automl_workshop/automl_workshop_slides.html){.uri}
 
--   Practical part (ca. 40 Min)
+-   Access RStudio Server via [rstudio.automl-workshop.ch](http://rstudio.automl-workshop.ch/) (more info later on)
 
-    -   Presenting the use case
+::: notes
+Alright, so first things first: If you want to follow along, you need internet. You can connect to the visitor wlan from uni basel as follows: Connect your laptop to it and open a browser. You will then get a code via SMS that you can use to connect. Or, as backup and because it's sometimes just easier: Use your phone as a hotspot.
 
-    -   Hands-on practices
+If you want to have a look at the slides, they are available at the following link. And finally, since this is a really a mini workshop and we don't want to loose too much time with the setup, you can access an RStudio server environment with the following link, where everything is hopefully already prepared and setup.
+:::
+
+## Outline
+
+**Theory (ca. 20 Min)**
+
+-   What is automated machine learning (AutoML) and why use it?
+
+-   What is H2O?
+
+-   Code examples
+
+**Practice (ca. 40 Min)**
+
+-   Presenting the use case
+
+-   Hands-on practices
+
+-   Short discussion
 
 ::: notes
 Hello everybody and welcome to this workshop!
@@ -57,35 +77,9 @@ Then, in the first 20 minutes, i will give you a very quick overview of the conc
 In the second part, i prepared a little use case that we will use as example. This will be a hands-on session where you will have the possibility to run and explore AutoML. Of course, this is more of a sneak preview of what you can do with it. But if some of you got curious about maybe have some ideas how to use it in one of your projects - then i consider that workshop as fully successful!
 :::
 
-## General info
+# Theory
 
--   Internet:
-
-    -   Connect to unibas-visitor on your laptop
-
-    -   Open browser and follow the instructions (SMS authentication)
-
-    -   ...or use your phone as a hotspot
-
--   Slides are available at:
-
-    <https://lucahuesler.github.io/automl_workshop/automl_workshop_slides.html>
-
--   Access RStudio Server via [rstudio.automl-workshop.ch](http://rstudio.automl-workshop.ch/)
-
-    -   User: rstudio / PW: ...
-
-    -   
-
-::: notes
-Alright, so first things first: If you want to follow along, you need internet. You can connect to the visitor wlan from uni basel as follows: Connect your laptop to it and open a browser. You will then get a code via SMS that you can use to connect. Or, as backup and because it's sometimes just easier: Use your phone as a hotspot.
-
-If you want to have a look at the slides, they are available at the following link. And finally, since this is a really a mini workshop and we don't want to loose too much time with the setup, you can access an RStudio server environment with the following link, where everything is hopefully already prepared and setup.
-:::
-
-# Theoretical part
-
-## What is automated machine learning?
+## What is automated machine learning? {visibility="hidden"}
 
 | *"AutoML aims to provide effective off-the-shelf learning systems to **free experts and non-experts alike from the tedious and time-consuming tasks of selecting the right algorithm for a dataset at hand**, along with the right preprocessing method and the various hyperparameters of all involved components."*
 
@@ -103,27 +97,23 @@ So lets start with with a definition from AutoML.org, one of the main players in
 So i found this interesting figure that shows the number of publications on Scopus, a very large database on scientific literature, that are containing AutoML in their key words and as you can see, the attention on the topic really exploded in the last few years, lets say since 2017 or 2018. So there must be something about it...
 :::
 
-## What is automated machine learning? {#automl-publications}
+## What is automated machine learning?
 
 [![A schematic for the typical modeling process (Silge & Kuhn, 2023).](figures/modelling-process.png){fig-align="center"}](https://www.tmwr.org/software-modeling)
 
 ::: notes
 But to give you a bit more of a practical idea i think a good way to understand it is to have a look at a typical modelling process: Let's say you have a specific use case at hand - lets say you forgot to ask who wants a vegetarian dinner for lunch and you should now predict it as good as possible based on the info from the participants. So you start to explore your data, you may have a look at age or gender, you may create new features that could give a hint to eating preferences of the people and you start to build some models. But which algorithm should you use? Maybe just linear regression that the cook will understand your prediction? Maybe something new and fancy like a gradient boosting? You start building and comparing algorithms but then you realize that you made an error with the newly calculated features and you have a wrong encoding somewhere...so before you come up with a final model, people actually just left for a nearby restaurant.
 
-So as you can see, building a prediction or classification model can be very time-consuming.
+This process can be very tedious and time-consuming and also, it requires a lot of coding knowledge. And thats where AutoML comes into play: AutoML tries to automate and streamline the machine learning workflow
 :::
 
-## What is automated machine learning?
+## What is automated machine learning? {visibility="hidden"}
 
-AutoML tries to automate the process (or at least parts of it):
+AutoML tries to automate the process of (or at least parts of it):
 
 -   Data preprocessing and feature engineering
 -   Model selection
 -   Model training and fine-tuning
-
-::: notes
-This process can be very tedious and time-consuming and also, it requires a lot of coding knowledge. And thats where AutoML comes into play: AutoML tries to automate and streamline the machine learning workflow
-:::
 
 ```{=html}
 <!--
@@ -132,20 +122,6 @@ This process can be very tedious and time-consuming and also, it requires a lot 
 [![2020 State of Data Science (Anaconda Report)](figures/anaconda_report_2022.png){fig-align="center"}](https://www.anaconda.com/resources/whitepapers/state-of-data-science-2020)
 -->
 ```
-## What is automated machine learning?
-
-::: r-stack
-![AutoML platforms (Source: Datasolut)](figures/automl-plattformen.png){.fragment fig-align="center"}
-
-![AutoML tools (Source: ISG Siegen)](figures/AutoML-Tools-and-Libraries-Logos.png){.fragment fig-align="center"}
-:::
-
-::: notes
-Here, you can see a timeline of AutoML platforms. H2O, the one that we will be using today, was one of the first platforms offering AutoML and then, more and more others and especially the giants like Google and Amazon also started to integrate AutoML.
-
-...and when you search for AutoML nowadays, you get something like this.
-:::
-
 ## ...and why use it?
 
 -   Choosing the best algorithm: There is no single best algorithm ("No free lunch" theorem)
@@ -159,11 +135,19 @@ So that directly brings us to the question: Why or when can AutoML be helpful?
 First and in my opinion the most important: You can actually not know what is the best algorithm for your use case. Depending on your specfic data and use case, some algorithms are more suitable than others.
 :::
 
-## What is H2O.ai
+## What is H2O.ai?
+
+![AutoML tools (Source: ISG Siegen)](figures/AutoML-Tools-and-Libraries-Logos.png)
+
+::: notes
+H2O is just one of many platforms, as you can see there is a variety of tools on the market...
+:::
+
+## What is H2O.ai?
 
 Machine learning platform that is:
 
--   Open source machine learning platform
+-   Open source
 -   APIs available for R and Python (or web GUI)
 -   Written in Java (speed)
 
@@ -184,6 +168,10 @@ AutoML trains several models by using the following available algorithms:
 -   DeepLearning (Fully Connected Deep Neural Network)
 
 -   Stacked Ensembles (Combination of the above models)
+
+::: footer
+See documentation: [H2O AutoML](https://docs.h2o.ai/h2o/latest-stable/h2o-docs/automl.html)
+:::
 
 # Code example
 
@@ -210,7 +198,11 @@ To start using h2o in R, you need the following: The first is kind of clear - yo
 Loading the library and connecting to the H2O cluster
 
 ```{r}
-
+#| echo: true
+#| eval: true
+#| fig-width: 10
+#| fig-height: 4.5
+#| code-line-numbers: "1|3"
 
 library(h2o)
 
@@ -228,7 +220,28 @@ The first step is always to load the library and then connect to the h2o cluster
 
 ## Prepare the data
 
-Transform data to a h2o dataframe
+The Iris Dataset contains four features (length and width of sepals and petals) of 150 samples of three species of Iris (Iris setosa, Iris virginica and Iris versicolor).
+
+```{r}
+#| echo: true
+#| eval: true
+#| tbl-colwidths: [10, 10, 10]
+#| code-line-numbers: "2|4"
+
+head(iris)
+```
+
+## Prepare the data
+
+Transform your data to a h2o dataframe:
+
+ 
+
+```{r}
+#| results: hide
+h2o.init()
+```
+
 
 ```{r}
 #| echo: true
@@ -236,17 +249,22 @@ Transform data to a h2o dataframe
 #| results: hide
 #| fig-width: 10
 #| fig-height: 4.5
-#| code-line-numbers: "2|4"
 h2o.init()
 iris.h2o <- as.h2o(iris)
 
 ```
 
+ 
+
+Similar to an R dataframe, but it is located in the H2O cluster, not in memory.
+
 ## Prepare the data
+```{r}
+#| results: hide
+h2o.init()
+```
 
-Split data into train and test set
-
-
+Split data into train and test set:
 
 ```{r}
 #| echo: true
@@ -254,7 +272,7 @@ Split data into train and test set
 #| fig-width: 10
 #| fig-height: 4.5
 #| code-line-numbers: "2|4|5"
-h2o.init()
+
 
 # create splits for train and test
 splits <- h2o.splitFrame(data = iris.h2o, ratios = c(0.75), seed = 1)
@@ -264,17 +282,16 @@ test  <- splits[[2]]
 
 ```
 
+ 
 
 Check the dimension of train and test set:
+
 ```{r}
 #| echo: true
 #| eval: true
 #| fig-width: 10
 #| fig-height: 4.5
-#| code-line-numbers: "2|5|6"
-h2o.init()
 
-# Check the dimensions
 dim(iris.h2o)
 dim(train)
 dim(test)
@@ -290,7 +307,6 @@ Define target and predictor variables:
 #| fig-width: 10
 #| fig-height: 4.5
 #| code-line-numbers: "1-2|4-5"
-h2o.init()
 
 # Target: Variable we want to predict
 y <- "Species"
@@ -303,6 +319,10 @@ x <- setdiff(colnames(iris.h2o), y)
 :::
 
 ## Run AutoML
+```{r}
+#| results: hide
+h2o.init()
+```
 
 Minimal example:
 
@@ -312,7 +332,6 @@ Minimal example:
 #| fig-height: 4.5
 #| eval: false
 #| code-line-numbers: "1|2|3"
-h2o.init()
 
 aml <- h2o.automl(x = x, # predictors
                   y = y, # target
@@ -324,8 +343,12 @@ aml <- h2o.automl(x = x, # predictors
 Learn more: [h2o.automl()](https://docs.h2o.ai/h2o/latest-stable/h2o-r/docs/reference/h2o.automl.html){target="_blank"}
 :::
 
-
 ## Run AutoML
+
+```{r}
+#| results: hide
+h2o.init()
+```
 
 More advanced example:
 
@@ -336,7 +359,6 @@ More advanced example:
 #| fig-width: 10
 #| fig-height: 4.5
 #| code-line-numbers: "4|5|6|7"
-h2o.init()
 
 aml <- h2o.automl(x = x, # predictors
                   y = y, # target
@@ -355,21 +377,20 @@ Learn more: [h2o.automl()](https://docs.h2o.ai/h2o/latest-stable/h2o-r/docs/refe
 
 ## Get the leaderboard
 
+See which algorithm performed best:
 
 ```{r}
 #| echo: true
-#| results: markup
 #| fig-width: 10
 #| fig-height: 4.5
-#| eval: false
-#| code-line-numbers: "1|2"
-h2o.init()
+#| eval: true
+#| code-line-numbers: "2|3"
 
 lb <- h2o.get_leaderboard(aml)
-h2o.head(lb, n = 25)
+head(lb)
 ```
 
-## Make predictions with best model
+## Evaluate performance on test data
 
 ```{r}
 #| echo: true
@@ -377,10 +398,23 @@ h2o.head(lb, n = 25)
 #| fig-width: 10
 #| fig-height: 4.5
 #| code-line-numbers: "1|3-4"
-h2o.init()
 
 aml_cl_test_perf <- h2o.performance(aml@leader, test)
 
 aml_cl_test_perf |>
   h2o.confusionMatrix()
 ```
+
+# Practice
+
+## Setup
+
+Go to: <http://rstudio.automl-workshop.ch/>
+
+::: notes
+So now after this short introduction, time to practice!
+
+I ask you to go to the following link, where you should come to the login page for RStudio. I will now come around and you can draw a login from my hat.
+
+So i will actually just do it before you so you can see how it works.
+:::
