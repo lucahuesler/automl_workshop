@@ -2,92 +2,106 @@
 title: "auto_ml_workshop"
 ---
 
-# Automated Machine Learning with R and h2o
+# Automated Machine Learning with R and h2o -Exercises
 
 Workshop 3 (HS120) \@ Swiss Days of Official Statistics, 30.08.2023-01.09.2023, Universität Basel
 
-## What is automated machine learning and why use it?
-
-There is no single best algorithm
-
-## What is H2O
-
-Machine learning platform that is:
-
--   Open Source
--   Distributed (training is done in a cluster, not in R or Python environment, not really relevant if you work in a local machine)
--   Written in Java (speed)
--   API's available for R, Python, Web GUI, etc.
+## Load libraries
 
 ```{r}
-library(tidyverse, warn.conflicts = FALSE)
-library(h2o, warn.conflicts = FALSE)
+library(tidyverse)
+library(h2o)
 ```
 
 ## Get the data
 
-We will use an OGD-Dataset for this workshop, available at [data.bl.ch](https://data.bl.ch/explore/dataset/12160/table). The data contains all the publicly available information of buildings in the Canton of Basel-Landschaft.
+We will use an OGD dataset for this workshop, available at [data.bl.ch](https://data.bl.ch/explore/dataset/12160/table). The data contains all the publicly available information of buildings in the Canton of Basel-Landschaft (cantonal register of buildings and dwellings).
+
+For this exercise, the dataset is already preprocessed and filtered to **existing residential buildings**. We first load the data and check the dimensions:
 
 ```{r}
-kgwr <- read_delim("https://data.bl.ch/api/explore/v2.1/catalog/datasets/12160/exports/csv?lang=de&timezone=Europe%2FParis&use_labels=true&delimiter=%3B", delim = ";")
+kgwr_residential <- read_rds("data/kgwr_residential.rds")
+
+dim(kgwr_residential)
 ```
 
-## Explorative analysis
+Our dataset contains 61'139 buildings with 62 variables.
 
-## Cleaning and transformation
+## The challenge
 
-We focus on existing residential buildings only:
-
-```{r}
-kgwr_residential <- kgwr |>
-  filter(gebaeudekategorie_bezeichnung == "Gebäude mit ausschliesslicher Wohnnutzung",
-         gebaeudestatus_bezeichnung == "Bestehend")
-```
-
-We create a new variable where energy sources are grouped:
-
-```{r}
-kgwr_residential <- kgwr_residential %>%
-  mutate(energie_waermequelle_heizung_primaer_gruppiert = case_when(
-    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Elektrizität") ~ "Electricity",
-    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Erdregister", "Erdwärme (generisch)", "Erdwärmesonde", "Wasser", "Luft") ~ "Geothermal",
-    energie_waermequelle_heizung_primaer_bezeichnung == "Fernwärme (generisch)" ~ "District Heating",
-    energie_waermequelle_heizung_primaer_bezeichnung == "Gas" ~ "Gas",
-    energie_waermequelle_heizung_primaer_bezeichnung == "Heizöl" ~ "Oil",
-    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Holz (Pellets)", "Holz (Schnitzel)", "Holz (Stückholz)", "Holz (generisch)") ~ "Wood",
-    energie_waermequelle_heizung_primaer_bezeichnung == "Sonne (thermisch)" ~ "Solar",
-    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Unbestimmt", "Keine") ~ "Undefined",
-    energie_waermequelle_heizung_primaer_bezeichnung == "Wasser (Grundwasser, Oberflächenwasser, Abwasser)" ~ "Water",
-    energie_waermequelle_heizung_primaer_bezeichnung == "Andere" ~ "Other",
-    TRUE ~ "Other"
-  ))
-```
+For about 1'600 (2.6%) residential buildings in the Canton Basel-Landschaft, the energy source is unknown:
 
 ```{r}
 kgwr_residential %>%
   count(energie_waermequelle_heizung_primaer_gruppiert) %>%
-  ggplot(aes(x = energie_waermequelle_heizung_primaer_gruppiert, y = n)) +
+  mutate(energie_waermequelle_heizung_primaer_gruppiert = 
+           reorder(energie_waermequelle_heizung_primaer_gruppiert, -n)) %>%
+  ggplot(aes(x = energie_waermequelle_heizung_primaer_gruppiert, y = n, 
+             fill = (energie_waermequelle_heizung_primaer_gruppiert == "Undefined"))) +
   geom_bar(stat = "identity") +
-  labs(title = "Distribution of Primary Heating Systems", 
+  scale_fill_manual(values = c("TRUE" = "red", "FALSE" = "grey50")) +
+  labs(title = "Distribution of energy source of primary heating system", 
        x = "Primary Heating System", 
        y = "Number of Buildings") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")
+
 ```
 
-## Train models
+In this exercise, we will try to find out if we can find a good classification model with AutoML that could help us determine the energy source of the buildings where no information is available.
 
-Our goal is to predict the energy source of buildings with missing information (= "Undefined"). For the training data, we filter out these buildings:
+Before we start, let's get a quick overview of these buildings:
 
 ```{r}
-kgwr_residential_train <- kgwr_residential |>
+
+# dataframe with buildings that have undefined energy source
+buildings_undefined_energy <- kgwr_residential %>%
+  filter(energie_waermequelle_heizung_primaer_gruppiert == "Undefined")
+
+
+buildings_undefined_energy %>%
+  ggplot(aes(x = baujahr_des_gebaeudes)) +
+  geom_bar() +
+  labs(title = "Distribution by Year of Construction", 
+       x = "Year of Construction", 
+       y = "Number of Buildings") +
+  theme_minimal()
+
+```
+
+We can see that most of the concerned buildings are rather new buildings, especially a high fraction of them was built between 2000-2010.
+
+```{r}
+buildings_undefined_energy %>%
+  ggplot(aes(x = gebaeudeklasse_bezeichnung)) +
+  geom_bar() +
+  labs(title = "Distribution by Building Class", 
+       x = "Building Class", 
+       y = "Number of Buildings") +
+  theme_minimal()
+```
+
+Around 1'200 (ca. 75%) of these buildings are single-family houses.
+
+## Prepare data
+
+Our goal is to predict the energy source of buildings with missing information (= `Undefined`). For modelling, create a new data frame `kgwr_residential_modelling`, where these buildings are removed.
+
+```{r}
+kgwr_residential_modelling <- kgwr_residential |>
   filter(energie_waermequelle_heizung_primaer_gruppiert != "Undefined")
 ```
 
-Now, we can select the variables that potentially contain information about the heating system:
+In this exercise, we will use a very simple approache for variable selection and just use a few variables that could potentially contain some information about the heating system:
+
+-   `gemeindename`: As the energy mix varies among municipalities (e.g. gas distribution only in some municipalities)
+-   `e_gebaeudekoordinate` and `n_gebaeudekoordinate`: The coordinates of a building might also tell us something about the energy source (e.g. presence of district heating)
+-   `baujahr_des_gebaeudes`: We also consider the construction year as the choice of the heating system evolved over time (see e.g. [Wohngebäude nach Energieträger der Heizung und Bauperiode 2020](https://www.statistik.bl.ch/web_portal/8_2_4?year=prozentual)).
+-   `gebaeudeflaeche` and `anzahl_geschosse`: The building area and number of floors finally provide information about dimensions of a building which can also influence the choice of the heating system.
 
 ```{r}
-kgwr_residential_train <- kgwr_residential_train |>
+kgwr_residential_modelling <- kgwr_residential_modelling |>
   select(energie_waermequelle_heizung_primaer_gruppiert,
          gemeindename, 
          e_gebaeudekoordinate, 
@@ -95,22 +109,23 @@ kgwr_residential_train <- kgwr_residential_train |>
          gebaeudeklasse_code, 
          baujahr_des_gebaeudes,
          gebaeudeflaeche,
-         anzahl_geschosse) |>
-  mutate(energie_waermequelle_heizung_primaer_gruppiert = as_factor(energie_waermequelle_heizung_primaer_gruppiert),
-         gemeindename = as_factor(gemeindename))
+         anzahl_geschosse)
   
 ```
+
+## Create train and test set
+
+We can now initialize the h2o cluster and transform the data into a h2o dataframe. We will use 80% of the observations for training and keep 20% for the test dataset.
 
 ```{r}
 # Initialize the H2O-3 cluster
 h2o.init()
 
-
 # convert to H2O frame
-kgwr_residential_train_h2o <- as.h2o(kgwr_residential_train)
+kgwr_residential_modelling.h2o <- as.h2o(kgwr_residential_modelling)
 
 # Split your data into 3 and save into variable "splits"
-splits <- h2o.splitFrame(kgwr_residential_train_h2o, c(0.8), seed = 42)
+splits <- h2o.splitFrame(kgwr_residential_modelling.h2o, c(0.8), seed = 42)
 
 # Extract all 3 splits into train, valid and test
 train <- splits[[1]]
@@ -121,31 +136,87 @@ dim(train)
 dim(test)
 ```
 
-## Run AutoML
-
 ```{r}
 
 # target
 y <- "energie_waermequelle_heizung_primaer_gruppiert"
 
-# predictors
-x <- setdiff(colnames(kgwr_residential_train_h2o), y)
+# predictors (everything but the target)
+x <- setdiff(colnames(kgwr_residential_modelling.h2o), y)
 
-# run automl
+```
+
+## Run AutoML
+
+Finally, we can run AutoML. The `max_models` argument specifies the number of individual (or "base") models.
+
+```{r}
 aml_energy_source <- h2o.automl(y = y,
                                 x = x,
                                 training_frame = train,
-                                max_runtime_secs = 10)
+                                #max_models = 10
+                                max_runtime_secs = 60)
 ```
+
+## Leaderboard
+
+Next, we will view the AutoML Leaderboard. Since we did not specify a `leaderboard_frame` in the `h2o.automl()` function for scoring and ranking the models, the AutoML leaderboard uses cross-validation metrics to rank the models.
+
+A default performance metric for each machine learning task (binary classification, multiclass classification, regression) is specified internally and the leaderboard will be sorted by that metric. In the case of multiclass classification problems, the default ranking metric is the mean per-class error.
 
 ```{r}
 # View the AutoML Leaderboard
-lb <- h2o.get_leaderboard(aml_energy_source, extra_columns = "ALL")
-h2o.head(lb, n = 25)
+lb <- h2o.get_leaderboard(aml_energy_source)
+print(lb, n = nrow(lb))  # Print all rows instead of default (6 rows)
+```
+
+## Get performance on test data
+
+With the `h2o.performance()` function, we can evaluate the performance of any trained model on the test set:
+
+```{r}
+# Performance of the leader model on test set
+perf_best_model <- h2o.performance(aml_energy_source@leader, test)
+```
+
+It is also possible to retrieve any trained model from the leaderboard by the model ID with `h2o.getModel(model_id)` and then evaluate the performance of that specific model. If you want to retrieve the best model of a specific algorithm, you can you the `h2o.get_best_model` function
+
+```{r}
+# Get the best XGBoost model
+best_xgb <- h2o.get_best_model(aml_energy_source, algorithm = "xgboost")
+
+# Performance of the best XGBoost model
+perf_best_xgb_model <- h2o.performance(best_xgb, test)
+```
+
+
+With `h2o.confusionMatrix()` , we can evaluate the performance of any trained model on the test set. The rows represent the actual values and the columns the predicted values:
+
+```{r}
+# Get confusion matrix of overall best model
+h2o.confusionMatrix(perf_best_model)
 ```
 
 ```{r}
-# Save the test performance of the leader model
-aml_cl_test_perf <- h2o.performance(aml_energy_source@leader, test)
-aml_cl_test_perf
+# Get confusion matrix of best XGBoost model
+h2o.confusionMatrix(perf_best_xgb_model)
 ```
+
+
+## Bonus: Model explainabilty
+
+```{r}
+# Explain an AutoML object
+h2o.varimp(aml_energy_source@leader)
+
+
+h2o.varimp_plot(best_xgb)
+
+```
+
+```{r}
+pd_plot <- h2o.pd_plot(best_xgb, test, "baujahr_des_gebaeudes")
+pd_plot
+
+```
+

@@ -34,18 +34,18 @@ COPY . /home/rstudio/auto_ml_workshop
 Navigate to the directory containing the Dockerfile and run:
 
 ```{bash}
-bash sudo docker build -t lucahuesler/rstudio-h2o:latest . 
+sudo docker build -t lucahuesler/rstudio-h2o:latest . 
 ```
 
 ### c. Pushing the Docker Image to Docker Hub
 
 First, log in to Docker:
 
-`bash docker login`
+`sudo docker login`
 
 Then, push the image:
 
-`bash sudo docker push lucahuesler/rstudio-h2o:latest`
+`sudo docker push lucahuesler/rstudio-h2o:latest`
 
 ## 2. Creating the DigitalOcean Droplet
 
@@ -71,11 +71,13 @@ From your local machine:
 
 Run the following on your Droplet:
 
-`bash sudo apt update sudo apt install docker.io sudo systemctl start docker sudo systemctl enable docker`
+`sudo apt update sudo apt install docker.io sudo systemctl start docker sudo systemctl enable docker`
 
 ### b. Pulling and Running the Docker Image
 
-`bash docker pull lucahuesler/rstudio-h2o:latest docker run -d -p 8787:8787 -e PASSWORD=your_desired_password lucahuesler/rstudio-h2o:latest`
+`docker pull lucahuesler/rstudio-h2o:latest`
+
+`docker run -d -p 8787:8787 -e PASSWORD=statistiktage2023 lucahuesler/rstudio-h2o:latest`
 
 Replace `your_desired_password` with the password you want users to use for RStudio.
 

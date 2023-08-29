@@ -1,44 +1,128 @@
 [
   {
-    "objectID": "automl_workshop_slides.html#automl-publications",
-    "href": "automl_workshop_slides.html#automl-publications",
+    "objectID": "automl_workshop_slides.html#general-info",
+    "href": "automl_workshop_slides.html#general-info",
     "title": "Automated Machine Learning with R and h2o",
-    "section": "What is automated machine learning?",
-    "text": "What is automated machine learning?\n\nA schematic for the typical modeling process (Silge & Kuhn, 2023).\nSo what exactly is AutoML? A good way to understand it is maybe to have a look at a typical modelling process: Let’s say you have a specific use case at hand - lets say you forgot to ask who wants a vegetarian dinner for lunch and you should now predict it as good as possible based on the info from the participants. So you start to explore your data, you may have a look at age or gender, you may create new features that could give a hint to eating preferences of the people and you start to build some models. But which algorithm should you use? Maybe just linear regression that the cook will understand your prediction? Maybe something new and fancy like a gradient boosting? You start building and comparing algorithms but then you realize that you made an error with the newly calculated features and you have a wrong encoding somewhere…so before you come up with a final model, people actually just left for a nearby restaurant.\nSo as you can see, building a prediction or classification model can be very time-consuming."
+    "section": "General info",
+    "text": "General info\n\nInternet:\n\nConnect to unibas-visitor on your laptop\nOpen browser and follow the instructions (SMS authentication)\n…or use your phone as a hotspot\n\nSlides are available at:\nhttps://lucahuesler.github.io/automl_workshop/automl_workshop_slides.html\nAccess RStudio Server via rstudio.automl-workshop.ch\n\nUser: rstudio / PW: …\n\n\n\n\nAlright, so first things first: If you want to follow along, you need internet. You can connect to the visitor wlan from uni basel as follows: Connect your laptop to it and open a browser. You will then get a code via SMS that you can use to connect. Or, as backup and because it’s sometimes just easier: Use your phone as a hotspot.\nIf you want to have a look at the slides, they are available at the following link. And finally, since this is a really a mini workshop and we don’t want to loose too much time with the setup, you can access an RStudio server environment with the following link, where everything is hopefully already prepared and setup."
   },
   {
     "objectID": "automl_workshop_slides.html#what-is-automated-machine-learning",
     "href": "automl_workshop_slides.html#what-is-automated-machine-learning",
     "title": "Automated Machine Learning with R and h2o",
     "section": "What is automated machine learning?",
-    "text": "What is automated machine learning?\n\n2020 State of Data Science (Anaconda Report)"
+    "text": "What is automated machine learning?\n“AutoML aims to provide effective off-the-shelf learning systems to free experts and non-experts alike from the tedious and time-consuming tasks of selecting the right algorithm for a dataset at hand, along with the right preprocessing method and the various hyperparameters of all involved components.”\nAutoML: Methods, Systems, Challenges (p. 136)\n\nSo lets start with with a definition from AutoML.org, one of the main players in academia for AutoML. And they give the following definition in their book. They define it as a toolset of methods and processes that makes ML actually available for non-experts."
   },
   {
     "objectID": "automl_workshop_slides.html#what-is-automated-machine-learning-1",
     "href": "automl_workshop_slides.html#what-is-automated-machine-learning-1",
     "title": "Automated Machine Learning with R and h2o",
     "section": "What is automated machine learning?",
-    "text": "What is automated machine learning?\nAutoML.org (p. 136):\n“AutoML aims to provide effective off-the-shelf learning systems to free experts and non-experts alike from the tedious and time-consuming tasks of selecting the right algorithm for a dataset at hand, along with the right preprocessing method and the various hyperparameters of all involved components.”\n\nAutoML.org is one of the main players in academia for AutoML. And they give the following definition in their book. They define it as a toolset of methods and processes that makes ML actually available for non-experts."
+    "text": "What is automated machine learning?\n\n\nSo i found this interesting figure that shows the number of publications on Scopus, a very large database on scientific literature, that are containing AutoML in their key words and as you can see, the attention on the topic really exploded in the last few years, lets say since 2017 or 2018. So there must be something about it…"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#automl-publications",
+    "href": "automl_workshop_slides.html#automl-publications",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "What is automated machine learning?",
+    "text": "What is automated machine learning?\n\nA schematic for the typical modeling process (Silge & Kuhn, 2023).\nBut to give you a bit more of a practical idea i think a good way to understand it is to have a look at a typical modelling process: Let’s say you have a specific use case at hand - lets say you forgot to ask who wants a vegetarian dinner for lunch and you should now predict it as good as possible based on the info from the participants. So you start to explore your data, you may have a look at age or gender, you may create new features that could give a hint to eating preferences of the people and you start to build some models. But which algorithm should you use? Maybe just linear regression that the cook will understand your prediction? Maybe something new and fancy like a gradient boosting? You start building and comparing algorithms but then you realize that you made an error with the newly calculated features and you have a wrong encoding somewhere…so before you come up with a final model, people actually just left for a nearby restaurant.\nSo as you can see, building a prediction or classification model can be very time-consuming."
   },
   {
     "objectID": "automl_workshop_slides.html#what-is-automated-machine-learning-2",
     "href": "automl_workshop_slides.html#what-is-automated-machine-learning-2",
     "title": "Automated Machine Learning with R and h2o",
     "section": "What is automated machine learning?",
-    "text": "What is automated machine learning?\n\n\nThis graph shows the number of publications on the topic"
+    "text": "What is automated machine learning?\nAutoML tries to automate the process (or at least parts of it):\n\nData preprocessing and feature engineering\nModel selection\nModel training and fine-tuning\n\n\nThis process can be very tedious and time-consuming and also, it requires a lot of coding knowledge. And thats where AutoML comes into play: AutoML tries to automate and streamline the machine learning workflow"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#what-is-automated-machine-learning-3",
+    "href": "automl_workshop_slides.html#what-is-automated-machine-learning-3",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "What is automated machine learning?",
+    "text": "What is automated machine learning?\n\n\n\n\nAutoML platforms (Source: Datasolut)\n\n\n\n\n\nAutoML tools (Source: ISG Siegen)\n\n\n\n\nHere, you can see a timeline of AutoML platforms. H2O, the one that we will be using today, was one of the first platforms offering AutoML and then, more and more others and especially the giants like Google and Amazon also started to integrate AutoML.\n…and when you search for AutoML nowadays, you get something like this."
   },
   {
     "objectID": "automl_workshop_slides.html#and-why-use-it",
     "href": "automl_workshop_slides.html#and-why-use-it",
     "title": "Automated Machine Learning with R and h2o",
     "section": "…and why use it?",
-    "text": "…and why use it?\nThere is no single best algorithm"
+    "text": "…and why use it?\n\nChoosing the best algorithm: There is no single best algorithm (“No free lunch” theorem)\nAvailability: Reduce the need for expertise in machine learning\nError reduction: Standardized approach that guarantees same operations to all models\nEfficiency: Automation of iterative tasks, more time to focus on model evaluation and explainability\n\n\nSo that directly brings us to the question: Why or when can AutoML be helpful?\nFirst and in my opinion the most important: You can actually not know what is the best algorithm for your use case. Depending on your specfic data and use case, some algorithms are more suitable than others."
   },
   {
-    "objectID": "automl_workshop_slides.html#what-is-h2o",
-    "href": "automl_workshop_slides.html#what-is-h2o",
+    "objectID": "automl_workshop_slides.html#what-is-h2o.ai",
+    "href": "automl_workshop_slides.html#what-is-h2o.ai",
     "title": "Automated Machine Learning with R and h2o",
-    "section": "What is H2O",
-    "text": "What is H2O\nMachine learning platform that is:\n\nOpen Source\nDistributed (training is done in a cluster, not in R or Python environment, not really relevant if you work in a local machine)\nWritten in Java (speed)"
+    "section": "What is H2O.ai",
+    "text": "What is H2O.ai\nMachine learning platform that is:\n\nOpen source machine learning platform\nAPIs available for R and Python (or web GUI)\nWritten in Java (speed)"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#h2o-automl",
+    "href": "automl_workshop_slides.html#h2o-automl",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "H2O AutoML",
+    "text": "H2O AutoML\nAutoML trains several models by using the following available algorithms:\n\nXGBoost\nGBM (Gradient Boosting Machine)\nGLM (Generalized Linear Model)\nDRF (Distributed Random Forest)\nXRT (eXtremely Randomized Trees)\nDeepLearning (Fully Connected Deep Neural Network)\nStacked Ensembles (Combination of the above models)"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#getting-started",
+    "href": "automl_workshop_slides.html#getting-started",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "Getting started",
+    "text": "Getting started\nWhat you need:\n\nR + RStudio (or other IDE)\nJava\nR-Package h2o\n\n\nSee documentation: Install in R\n\n\nTo start using h2o in R, you need the following: The first is kind of clear - you obiously need R a installation of R and RStudio (…or any other environment). Then, as h2o is running with Java, you need Java installed as well. And finally you need to install the h2o R-package."
+  },
+  {
+    "objectID": "automl_workshop_slides.html#initialize-and-connect",
+    "href": "automl_workshop_slides.html#initialize-and-connect",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "Initialize and connect",
+    "text": "Initialize and connect\nLoading the library and connecting to the H2O cluster\n\n\n Connection successful!\n\nR is connected to the H2O cluster: \n    H2O cluster uptime:         1 hours 23 minutes \n    H2O cluster timezone:       Europe/Zurich \n    H2O data parsing timezone:  UTC \n    H2O cluster version:        3.42.0.3 \n    H2O cluster version age:    7 days, 3 hours and 48 minutes \n    H2O cluster name:           H2O_started_from_R_luca_qxb001 \n    H2O cluster total nodes:    1 \n    H2O cluster total memory:   4.93 GB \n    H2O cluster total cores:    8 \n    H2O cluster allowed cores:  8 \n    H2O cluster healthy:        TRUE \n    H2O Connection ip:          localhost \n    H2O Connection port:        54321 \n    H2O Connection proxy:       NA \n    H2O Internal Security:      FALSE \n    R Version:                  R version 4.2.2 Patched (2022-11-10 r83330) \n\n\n\nSee documentation: Starting h2o from R\n\n\nThe first step is always to load the library and then connect to the h2o cluster with h2o.init(). If everything when well it will give you a “Connection successful” together with some info about your cluser, such the cores and memory available to train the models. You can specifiy all that in the init-function, but i won’t go into detail about this here."
+  },
+  {
+    "objectID": "automl_workshop_slides.html#prepare-the-data",
+    "href": "automl_workshop_slides.html#prepare-the-data",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "Prepare the data",
+    "text": "Prepare the data\nTransform data to a h2o dataframe\n\nh2o.init()\niris.h2o <- as.h2o(iris)"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#prepare-the-data-1",
+    "href": "automl_workshop_slides.html#prepare-the-data-1",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "Prepare the data",
+    "text": "Prepare the data\nSplit data into train and test set\n\nh2o.init()\n\n Connection successful!\n\nR is connected to the H2O cluster: \n    H2O cluster uptime:         1 hours 31 minutes \n    H2O cluster timezone:       Europe/Zurich \n    H2O data parsing timezone:  UTC \n    H2O cluster version:        3.42.0.3 \n    H2O cluster version age:    7 days, 3 hours and 56 minutes \n    H2O cluster name:           H2O_started_from_R_luca_qxb001 \n    H2O cluster total nodes:    1 \n    H2O cluster total memory:   4.92 GB \n    H2O cluster total cores:    8 \n    H2O cluster allowed cores:  8 \n    H2O cluster healthy:        TRUE \n    H2O Connection ip:          localhost \n    H2O Connection port:        54321 \n    H2O Connection proxy:       NA \n    H2O Internal Security:      FALSE \n    R Version:                  R version 4.2.2 Patched (2022-11-10 r83330) \n\n# create splits for train and test\nsplits <- h2o.splitFrame(data = iris.h2o, ratios = c(0.75), seed = 1)\n\ntrain <- splits[[1]]\ntest  <- splits[[2]]\n\nCheck the dimension of train and test set:\n\nh2o.init()\n\n Connection successful!\n\nR is connected to the H2O cluster: \n    H2O cluster uptime:         1 hours 31 minutes \n    H2O cluster timezone:       Europe/Zurich \n    H2O data parsing timezone:  UTC \n    H2O cluster version:        3.42.0.3 \n    H2O cluster version age:    7 days, 3 hours and 56 minutes \n    H2O cluster name:           H2O_started_from_R_luca_qxb001 \n    H2O cluster total nodes:    1 \n    H2O cluster total memory:   4.92 GB \n    H2O cluster total cores:    8 \n    H2O cluster allowed cores:  8 \n    H2O cluster healthy:        TRUE \n    H2O Connection ip:          localhost \n    H2O Connection port:        54321 \n    H2O Connection proxy:       NA \n    H2O Internal Security:      FALSE \n    R Version:                  R version 4.2.2 Patched (2022-11-10 r83330) \n\n# Check the dimensions\ndim(iris.h2o)\n\n[1] 150   5\n\ndim(train)\n\n[1] 119   5\n\ndim(test)\n\n[1] 31  5"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#prepare-the-data-2",
+    "href": "automl_workshop_slides.html#prepare-the-data-2",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "Prepare the data",
+    "text": "Prepare the data\nDefine target and predictor variables:\n\nh2o.init()\n\n Connection successful!\n\nR is connected to the H2O cluster: \n    H2O cluster uptime:         1 hours 31 minutes \n    H2O cluster timezone:       Europe/Zurich \n    H2O data parsing timezone:  UTC \n    H2O cluster version:        3.42.0.3 \n    H2O cluster version age:    7 days, 3 hours and 56 minutes \n    H2O cluster name:           H2O_started_from_R_luca_qxb001 \n    H2O cluster total nodes:    1 \n    H2O cluster total memory:   4.92 GB \n    H2O cluster total cores:    8 \n    H2O cluster allowed cores:  8 \n    H2O cluster healthy:        TRUE \n    H2O Connection ip:          localhost \n    H2O Connection port:        54321 \n    H2O Connection proxy:       NA \n    H2O Internal Security:      FALSE \n    R Version:                  R version 4.2.2 Patched (2022-11-10 r83330) \n\n# Target: Variable we want to predict\ny <- \"Species\"\n\n# Predictors\nx <- setdiff(colnames(iris.h2o), y)"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#run-automl",
+    "href": "automl_workshop_slides.html#run-automl",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "Run AutoML",
+    "text": "Run AutoML\nMinimal example:\n\nh2o.init()\n\naml <- h2o.automl(x = x, # predictors\n                  y = y, # target\n                  training_frame = train) # training data\n\n\nLearn more: h2o.automl()"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#run-automl-1",
+    "href": "automl_workshop_slides.html#run-automl-1",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "Run AutoML",
+    "text": "Run AutoML\nMore advanced example:\n\nh2o.init()\n\naml <- h2o.automl(x = x, # predictors\n                  y = y, # target\n                  training_frame = train, # training data\n                  max_runtime_secs = 10, # define runtime\n                  max_models = 20, # define max number of models to be trained\n                  exclude_algos = c(\"GLM\", \"DeepLearning\"), # excluding specific algos\n                  include_algos = NULL, # including specific algos\n                  ) \n\n\nLearn more: h2o.automl()"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#get-the-leaderboard",
+    "href": "automl_workshop_slides.html#get-the-leaderboard",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "Get the leaderboard",
+    "text": "Get the leaderboard\n\nh2o.init()\n\nlb <- h2o.get_leaderboard(aml)\nh2o.head(lb, n = 25)"
+  },
+  {
+    "objectID": "automl_workshop_slides.html#make-predictions-with-best-model",
+    "href": "automl_workshop_slides.html#make-predictions-with-best-model",
+    "title": "Automated Machine Learning with R and h2o",
+    "section": "Make predictions with best model",
+    "text": "Make predictions with best model\n\nh2o.init()\n\n Connection successful!\n\nR is connected to the H2O cluster: \n    H2O cluster uptime:         1 hours 31 minutes \n    H2O cluster timezone:       Europe/Zurich \n    H2O data parsing timezone:  UTC \n    H2O cluster version:        3.42.0.3 \n    H2O cluster version age:    7 days, 3 hours and 56 minutes \n    H2O cluster name:           H2O_started_from_R_luca_qxb001 \n    H2O cluster total nodes:    1 \n    H2O cluster total memory:   4.92 GB \n    H2O cluster total cores:    8 \n    H2O cluster allowed cores:  8 \n    H2O cluster healthy:        TRUE \n    H2O Connection ip:          localhost \n    H2O Connection port:        54321 \n    H2O Connection proxy:       NA \n    H2O Internal Security:      FALSE \n    R Version:                  R version 4.2.2 Patched (2022-11-10 r83330) \n\naml_cl_test_perf <- h2o.performance(aml@leader, test)\n\naml_cl_test_perf |>\n  h2o.confusionMatrix()"
   }
 ]

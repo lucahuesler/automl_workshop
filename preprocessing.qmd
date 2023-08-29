@@ -1,0 +1,68 @@
+---
+title: "Preprocessing"
+format: html
+---
+
+```{r}
+library(tidyverse)
+```
+
+# Get data
+
+```{r}
+kgwr <- read_delim("https://data.bl.ch/api/explore/v2.1/catalog/datasets/12160/exports/csv?lang=de&timezone=Europe%2FParis&use_labels=true&delimiter=%3B", delim = ";")
+```
+
+
+## Cleaning and transformation
+
+We focus on existing residential buildings only:
+
+```{r}
+kgwr_residential <- kgwr |>
+  filter(gebaeudekategorie_bezeichnung == "Gebäude mit ausschliesslicher Wohnnutzung",
+         gebaeudestatus_bezeichnung == "Bestehend")
+```
+
+We create a new variable where energy sources are grouped:
+
+```{r}
+kgwr_residential <- kgwr_residential %>%
+  mutate(energie_waermequelle_heizung_primaer_gruppiert = case_when(
+    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Elektrizität") ~ "Electricity",
+    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Erdregister", "Erdwärme (generisch)", "Erdwärmesonde", "Wasser (Grundwasser, Oberflächenwasser, Abwasser)", "Wasser", "Luft") ~ "Geothermal",
+    energie_waermequelle_heizung_primaer_bezeichnung == "Fernwärme (generisch)" ~ "District Heating",
+    energie_waermequelle_heizung_primaer_bezeichnung == "Gas" ~ "Gas",
+    energie_waermequelle_heizung_primaer_bezeichnung == "Heizöl" ~ "Oil",
+    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Holz (Pellets)", "Holz (Schnitzel)", "Holz (Stückholz)", "Holz (generisch)") ~ "Wood",
+    energie_waermequelle_heizung_primaer_bezeichnung == "Sonne (thermisch)" ~ "Solar",
+    energie_waermequelle_heizung_primaer_bezeichnung %in% c("Unbestimmt", "Keine") ~ "Undefined",
+    energie_waermequelle_heizung_primaer_bezeichnung == "Andere" ~ "Other",
+    TRUE ~ "Other"
+  )
+)
+```
+
+
+Finally, we ensure correct variables types for the variables of interes:
+
+```{r}
+kgwr_residential <- kgwr_residential |>
+  mutate(
+    energie_waermequelle_heizung_primaer_gruppiert = as_factor(energie_waermequelle_heizung_primaer_gruppiert),
+    gemeindename = as.factor(gemeindename),
+    gebaeudeklasse_bezeichnung = as.factor(gebaeudeklasse_bezeichnung),
+    e_gebaeudekoordinate = as.numeric(e_gebaeudekoordinate),
+    n_gebaeudekoordinate = as.numeric(n_gebaeudekoordinate),
+    baujahr_des_gebaeudes = as.numeric(baujahr_des_gebaeudes),
+    gebaeudeflaeche = as.numeric(gebaeudeflaeche),
+    anzahl_geschosse = as.numeric(anzahl_geschosse)
+  )
+```
+
+And we save the preprocessed dataframe as rds:
+
+```{r}
+write_rds(kgwr_residential, "data/kgwr_residential.rds")
+```
+

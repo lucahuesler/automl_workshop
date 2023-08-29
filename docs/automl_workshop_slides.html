@@ -28,9 +28,72 @@
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link rel="stylesheet" href="logo.css">
   <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -319,6 +382,9 @@
       margin-right: 0; 
     }
   </style>
+  
+  <link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+  <script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -340,22 +406,30 @@ Luca Hüsler
 </div>
 
 </section>
+<section>
 <section id="outline" class="title-slide slide level1 center">
 <h1>Outline</h1>
-
-</section>
-
-<section>
-<section id="what-is-automl" class="title-slide slide level1 center">
-<h1>What is AutoML?</h1>
-
-</section>
-<section id="automl-publications" class="slide level2">
-<h2>What is automated machine learning?</h2>
-
-<img data-src="figures/modelling-process.png" class="r-stretch quarto-figure-center"><p class="caption">A schematic for the typical modeling process (Silge &amp; Kuhn, 2023).</p><aside class="notes">
-<p>So what exactly is AutoML? A good way to understand it is maybe to have a look at a typical modelling process: Let’s say you have a specific use case at hand - lets say you forgot to ask who wants a vegetarian dinner for lunch and you should now predict it as good as possible based on the info from the participants. So you start to explore your data, you may have a look at age or gender, you may create new features that could give a hint to eating preferences of the people and you start to build some models. But which algorithm should you use? Maybe just linear regression that the cook will understand your prediction? Maybe something new and fancy like a gradient boosting? You start building and comparing algorithms but then you realize that you made an error with the newly calculated features and you have a wrong encoding somewhere…so before you come up with a final model, people actually just left for a nearby restaurant.</p>
-<p>So as you can see, building a prediction or classification model can be very time-consuming.</p>
+<ul>
+<li><p>General Info (Setup)</p></li>
+<li><p>Theoretical Part (ca. 20 Min)</p>
+<ul>
+<li><p>What is automated machine learning (AutoML) and why use it?</p></li>
+<li><p>What is H2O?</p></li>
+<li><p>Code examples</p></li>
+</ul></li>
+<li><p>Practical part (ca. 40 Min)</p>
+<ul>
+<li><p>Presenting the use case</p></li>
+<li><p>Hands-on practices</p></li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>Hello everybody and welcome to this workshop!</p>
+<p>As you can see, we will work today with R and my goal is to give a practical introduction to the topic and to make the topic maybe a bit less abstract for some of you. But before i do that, a quick note on myself so that you know who is actually talking to you: My name is Luca Hüsler, i work for the Amt für Daten und Statstik in Basel-Landschaft where im responible for the cantonal register of buildings and dwellings, as well as for the section of “Territory and environment”. Also, im about to finish a master in data science at Lucerne University of Applied Sciences and actually what we will do today is closely related to my master’s thesis where automated machine learning was an important component.</p>
+<p>So, what is the plan for this hour?</p>
+<p>As this is a workshop, you can not just lean back and listen to me. Of course i will not force you to do that, but for those who actually want to follow along, i will give you some info to get ready.</p>
+<p>Then, in the first 20 minutes, i will give you a very quick overview of the concept of autoML and why or when this can be interesting. Then, another short intro to the framework tha we will be using: H2O and after this, things will become more practical and we will jump right into the code and how you actually run this in R.</p>
+<p>In the second part, i prepared a little use case that we will use as example. This will be a hands-on session where you will have the possibility to run and explore AutoML. Of course, this is more of a sneak preview of what you can do with it. But if some of you got curious about maybe have some ideas how to use it in one of your projects - then i consider that workshop as fully successful!</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -368,16 +442,84 @@ Luca Hüsler
           display:block!important;
       }</style></aside>
 </section>
+<section id="general-info" class="slide level2">
+<h2>General info</h2>
+<ul>
+<li><p>Internet:</p>
+<ul>
+<li><p>Connect to unibas-visitor on your laptop</p></li>
+<li><p>Open browser and follow the instructions (SMS authentication)</p></li>
+<li><p>…or use your phone as a hotspot</p></li>
+</ul></li>
+<li><p>Slides are available at:</p>
+<p><a href="https://lucahuesler.github.io/automl_workshop/automl_workshop_slides.html" class="uri">https://lucahuesler.github.io/automl_workshop/automl_workshop_slides.html</a></p></li>
+<li><p>Access RStudio Server via <a href="http://rstudio.automl-workshop.ch/">rstudio.automl-workshop.ch</a></p>
+<ul>
+<li><p>User: rstudio / PW: …</p></li>
+<li></li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>Alright, so first things first: If you want to follow along, you need internet. You can connect to the visitor wlan from uni basel as follows: Connect your laptop to it and open a browser. You will then get a code via SMS that you can use to connect. Or, as backup and because it’s sometimes just easier: Use your phone as a hotspot.</p>
+<p>If you want to have a look at the slides, they are available at the following link. And finally, since this is a really a mini workshop and we don’t want to loose too much time with the setup, you can access an RStudio server environment with the following link, where everything is hopefully already prepared and setup.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section></section>
+<section>
+<section id="theoretical-part" class="title-slide slide level1 center">
+<h1>Theoretical part</h1>
+
+</section>
 <section id="what-is-automated-machine-learning" class="slide level2">
 <h2>What is automated machine learning?</h2>
-
-<img data-src="figures/anaconda_report_2022.png" class="r-stretch quarto-figure-center"><p class="caption">2020 State of Data Science (Anaconda Report)</p></section>
+<p><em>“AutoML aims to provide effective off-the-shelf learning systems to <strong>free experts and non-experts alike from the tedious and time-consuming tasks of selecting the right algorithm for a dataset at hand</strong>, along with the right preprocessing method and the various hyperparameters of all involved components.”</em></p>
+<p><a href="https://www.automl.org/book/" title="AutoML.org">AutoML: Methods, Systems, Challenges (p.&nbsp;136)</a></p>
+<aside class="notes">
+<p>So lets start with with a definition from AutoML.org, one of the main players in academia for AutoML. And they give the following definition in their book. They define it as a toolset of methods and processes that makes ML actually available for non-experts.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
 <section id="what-is-automated-machine-learning-1" class="slide level2">
 <h2>What is automated machine learning?</h2>
-<p><a href="https://www.automl.org/book/" title="AutoML.org">AutoML.org (p.&nbsp;136):</a></p>
-<p><em>“AutoML aims to provide effective off-the-shelf learning systems to free experts and non-experts alike from the tedious and time-consuming tasks of selecting the right algorithm for a dataset at hand, along with the right preprocessing method and the various hyperparameters of all involved components.”</em></p>
-<aside class="notes">
-<p>AutoML.org is one of the main players in academia for AutoML. And they give the following definition in their book. They define it as a toolset of methods and processes that makes ML actually available for non-experts.</p>
+
+<img data-src="figures/automl_publications.png" width="1300" class="r-stretch quarto-figure-center"><aside class="notes">
+<p>So i found this interesting figure that shows the number of publications on Scopus, a very large database on scientific literature, that are containing AutoML in their key words and as you can see, the attention on the topic really exploded in the last few years, lets say since 2017 or 2018. So there must be something about it…</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="automl-publications" class="slide level2">
+<h2>What is automated machine learning?</h2>
+
+<img data-src="figures/modelling-process.png" class="r-stretch quarto-figure-center"><p class="caption">A schematic for the typical modeling process (Silge &amp; Kuhn, 2023).</p><aside class="notes">
+<p>But to give you a bit more of a practical idea i think a good way to understand it is to have a look at a typical modelling process: Let’s say you have a specific use case at hand - lets say you forgot to ask who wants a vegetarian dinner for lunch and you should now predict it as good as possible based on the info from the participants. So you start to explore your data, you may have a look at age or gender, you may create new features that could give a hint to eating preferences of the people and you start to build some models. But which algorithm should you use? Maybe just linear regression that the cook will understand your prediction? Maybe something new and fancy like a gradient boosting? You start building and comparing algorithms but then you realize that you made an error with the newly calculated features and you have a wrong encoding somewhere…so before you come up with a final model, people actually just left for a nearby restaurant.</p>
+<p>So as you can see, building a prediction or classification model can be very time-consuming.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -392,9 +534,50 @@ Luca Hüsler
 </section>
 <section id="what-is-automated-machine-learning-2" class="slide level2">
 <h2>What is automated machine learning?</h2>
+<p>AutoML tries to automate the process (or at least parts of it):</p>
+<ul>
+<li>Data preprocessing and feature engineering</li>
+<li>Model selection</li>
+<li>Model training and fine-tuning</li>
+</ul>
+<aside class="notes">
+<p>This process can be very tedious and time-consuming and also, it requires a lot of coding knowledge. And thats where AutoML comes into play: AutoML tries to automate and streamline the machine learning workflow</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!--
+## What is automated machine learning?
 
-<img data-src="figures/automl_publications.png" width="1300" class="r-stretch quarto-figure-center"><aside class="notes">
-<p>This graph shows the number of publications on the topic</p>
+[![2020 State of Data Science (Anaconda Report)](figures/anaconda_report_2022.png){fig-align="center"}](https://www.anaconda.com/resources/whitepapers/state-of-data-science-2020)
+-->
+</section>
+<section id="what-is-automated-machine-learning-3" class="slide level2">
+<h2>What is automated machine learning?</h2>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="figures/automl-plattformen.png" class="fragment"></p>
+<p></p><figcaption>AutoML platforms (Source: Datasolut)</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="figures/AutoML-Tools-and-Libraries-Logos.png" class="fragment"></p>
+<p></p><figcaption>AutoML tools (Source: ISG Siegen)</figcaption><p></p>
+</figure>
+</div>
+</div>
+<aside class="notes">
+<p>Here, you can see a timeline of AutoML platforms. H2O, the one that we will be using today, was one of the first platforms offering AutoML and then, more and more others and especially the giants like Google and Amazon also started to integrate AutoML.</p>
+<p>…and when you search for AutoML nowadays, you get something like this.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -409,19 +592,330 @@ Luca Hüsler
 </section>
 <section id="and-why-use-it" class="slide level2">
 <h2>…and why use it?</h2>
-<p>There is no single best algorithm</p>
+<ul>
+<li>Choosing the best algorithm: There is no single best algorithm (“No free lunch” theorem)</li>
+<li>Availability: Reduce the need for expertise in machine learning</li>
+<li>Error reduction: Standardized approach that guarantees same operations to all models</li>
+<li>Efficiency: Automation of iterative tasks, more time to focus on model evaluation and explainability</li>
+</ul>
+<aside class="notes">
+<p>So that directly brings us to the question: Why or when can AutoML be helpful?</p>
+<p>First and in my opinion the most important: You can actually not know what is the best algorithm for your use case. Depending on your specfic data and use case, some algorithms are more suitable than others.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="what-is-h2o" class="slide level2">
-<h2>What is H2O</h2>
+<section id="what-is-h2o.ai" class="slide level2">
+<h2>What is H2O.ai</h2>
 <p>Machine learning platform that is:</p>
 <ul>
-<li>Open Source</li>
-<li>Distributed (training is done in a cluster, not in R or Python environment, not really relevant if you work in a local machine)</li>
+<li>Open source machine learning platform</li>
+<li>APIs available for R and Python (or web GUI)</li>
 <li>Written in Java (speed)</li>
 </ul>
+</section>
+<section id="h2o-automl" class="slide level2">
+<h2>H2O AutoML</h2>
+<p>AutoML trains several models by using the following available algorithms:</p>
+<ul>
+<li><p>XGBoost</p></li>
+<li><p>GBM (Gradient Boosting Machine)</p></li>
+<li><p>GLM (Generalized Linear Model)</p></li>
+<li><p>DRF (Distributed Random Forest)</p></li>
+<li><p>XRT (eXtremely Randomized Trees)</p></li>
+<li><p>DeepLearning (Fully Connected Deep Neural Network)</p></li>
+<li><p>Stacked Ensembles (Combination of the above models)</p></li>
+</ul>
+</section></section>
+<section>
+<section id="code-example" class="title-slide slide level1 center">
+<h1>Code example</h1>
+
+</section>
+<section id="getting-started" class="slide level2">
+<h2>Getting started</h2>
+<p>What you need:</p>
+<ul>
+<li><p>R + RStudio (or other IDE)</p></li>
+<li><p>Java</p></li>
+<li><p>R-Package <a href="https://docs.h2o.ai/h2o/latest-stable/h2o-r/docs/index.html" title="R-Package h2o">h2o</a></p></li>
+</ul>
+<div class="footer">
+<p>See documentation: <a href="https://docs.h2o.ai/h2o/latest-stable/h2o-docs/downloading.html?_ga=2.83856081.69221196.1693155051-1604105354.1692224368#install-in-r">Install in R</a></p>
+</div>
+<aside class="notes">
+<p>To start using h2o in R, you need the following: The first is kind of clear - you obiously need R a installation of R and RStudio (…or any other environment). Then, as h2o is running with Java, you need Java installed as well. And finally you need to install the h2o R-package.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="initialize-and-connect" class="slide level2">
+<h2>Initialize and connect</h2>
+<p>Loading the library and connecting to the H2O cluster</p>
+<div class="cell" data-hash="automl_workshop_slides_cache/revealjs/unnamed-chunk-1_f8ed3576b0bb644f86686a1468b2b6df">
+<div class="cell-output cell-output-stdout">
+<pre><code> Connection successful!
+
+R is connected to the H2O cluster: 
+    H2O cluster uptime:         1 hours 23 minutes 
+    H2O cluster timezone:       Europe/Zurich 
+    H2O data parsing timezone:  UTC 
+    H2O cluster version:        3.42.0.3 
+    H2O cluster version age:    7 days, 3 hours and 48 minutes 
+    H2O cluster name:           H2O_started_from_R_luca_qxb001 
+    H2O cluster total nodes:    1 
+    H2O cluster total memory:   4.93 GB 
+    H2O cluster total cores:    8 
+    H2O cluster allowed cores:  8 
+    H2O cluster healthy:        TRUE 
+    H2O Connection ip:          localhost 
+    H2O Connection port:        54321 
+    H2O Connection proxy:       NA 
+    H2O Internal Security:      FALSE 
+    R Version:                  R version 4.2.2 Patched (2022-11-10 r83330) </code></pre>
+</div>
+</div>
+<div class="footer">
+<p>See documentation: <a href="https://docs.h2o.ai/h2o/latest-stable/h2o-docs/starting-h2o.html#from-r">Starting h2o from R</a></p>
+</div>
+<aside class="notes">
+<p>The first step is always to load the library and then connect to the h2o cluster with h2o.init(). If everything when well it will give you a “Connection successful” together with some info about your cluser, such the cores and memory available to train the models. You can specifiy all that in the init-function, but i won’t go into detail about this here.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="prepare-the-data" class="slide level2">
+<h2>Prepare the data</h2>
+<p>Transform data to a h2o dataframe</p>
+<div class="cell" data-hash="automl_workshop_slides_cache/revealjs/unnamed-chunk-2_87998a230f286b60209cbb4604893c28">
+<div class="sourceCode cell-code" id="cb2" data-code-line-numbers="2|4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">h2o.init</span>()</span>
+<span id="cb2-2"><a href="#cb2-2"></a>iris.h2o <span class="ot">&lt;-</span> <span class="fu">as.h2o</span>(iris)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="prepare-the-data-1" class="slide level2">
+<h2>Prepare the data</h2>
+<p>Split data into train and test set</p>
+<div class="cell" data-hash="automl_workshop_slides_cache/revealjs/unnamed-chunk-3_c2508b612c7cb73ac5cf9535587f873a">
+<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="2|4|5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">h2o.init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Connection successful!
+
+R is connected to the H2O cluster: 
+    H2O cluster uptime:         1 hours 31 minutes 
+    H2O cluster timezone:       Europe/Zurich 
+    H2O data parsing timezone:  UTC 
+    H2O cluster version:        3.42.0.3 
+    H2O cluster version age:    7 days, 3 hours and 56 minutes 
+    H2O cluster name:           H2O_started_from_R_luca_qxb001 
+    H2O cluster total nodes:    1 
+    H2O cluster total memory:   4.92 GB 
+    H2O cluster total cores:    8 
+    H2O cluster allowed cores:  8 
+    H2O cluster healthy:        TRUE 
+    H2O Connection ip:          localhost 
+    H2O Connection port:        54321 
+    H2O Connection proxy:       NA 
+    H2O Internal Security:      FALSE 
+    R Version:                  R version 4.2.2 Patched (2022-11-10 r83330) </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="2|4|5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># create splits for train and test</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>splits <span class="ot">&lt;-</span> <span class="fu">h2o.splitFrame</span>(<span class="at">data =</span> iris.h2o, <span class="at">ratios =</span> <span class="fu">c</span>(<span class="fl">0.75</span>), <span class="at">seed =</span> <span class="dv">1</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a>train <span class="ot">&lt;-</span> splits[[<span class="dv">1</span>]]</span>
+<span id="cb5-5"><a href="#cb5-5"></a>test  <span class="ot">&lt;-</span> splits[[<span class="dv">2</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Check the dimension of train and test set:</p>
+<div class="cell" data-hash="automl_workshop_slides_cache/revealjs/unnamed-chunk-4_8c15926751df18b977d1a9cc280445d6">
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="2|5|6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">h2o.init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Connection successful!
+
+R is connected to the H2O cluster: 
+    H2O cluster uptime:         1 hours 31 minutes 
+    H2O cluster timezone:       Europe/Zurich 
+    H2O data parsing timezone:  UTC 
+    H2O cluster version:        3.42.0.3 
+    H2O cluster version age:    7 days, 3 hours and 56 minutes 
+    H2O cluster name:           H2O_started_from_R_luca_qxb001 
+    H2O cluster total nodes:    1 
+    H2O cluster total memory:   4.92 GB 
+    H2O cluster total cores:    8 
+    H2O cluster allowed cores:  8 
+    H2O cluster healthy:        TRUE 
+    H2O Connection ip:          localhost 
+    H2O Connection port:        54321 
+    H2O Connection proxy:       NA 
+    H2O Internal Security:      FALSE 
+    R Version:                  R version 4.2.2 Patched (2022-11-10 r83330) </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="2|5|6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Check the dimensions</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">dim</span>(iris.h2o)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 150   5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="2|5|6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">dim</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 119   5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="2|5|6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">dim</span>(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 31  5</code></pre>
+</div>
+</div>
+</section>
+<section id="prepare-the-data-2" class="slide level2">
+<h2>Prepare the data</h2>
+<p>Define target and predictor variables:</p>
+<div class="cell" data-hash="automl_workshop_slides_cache/revealjs/unnamed-chunk-5_40c626cafa5846ad115c4f0839846a2e">
+<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="1-2|4-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">h2o.init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Connection successful!
+
+R is connected to the H2O cluster: 
+    H2O cluster uptime:         1 hours 31 minutes 
+    H2O cluster timezone:       Europe/Zurich 
+    H2O data parsing timezone:  UTC 
+    H2O cluster version:        3.42.0.3 
+    H2O cluster version age:    7 days, 3 hours and 56 minutes 
+    H2O cluster name:           H2O_started_from_R_luca_qxb001 
+    H2O cluster total nodes:    1 
+    H2O cluster total memory:   4.92 GB 
+    H2O cluster total cores:    8 
+    H2O cluster allowed cores:  8 
+    H2O cluster healthy:        TRUE 
+    H2O Connection ip:          localhost 
+    H2O Connection port:        54321 
+    H2O Connection proxy:       NA 
+    H2O Internal Security:      FALSE 
+    R Version:                  R version 4.2.2 Patched (2022-11-10 r83330) </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="1-2|4-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># Target: Variable we want to predict</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>y <span class="ot">&lt;-</span> <span class="st">"Species"</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="co"># Predictors</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>x <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">colnames</span>(iris.h2o), y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<aside class="notes">
+
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="run-automl" class="slide level2">
+<h2>Run AutoML</h2>
+<p>Minimal example:</p>
+<div class="cell" data-hash="automl_workshop_slides_cache/revealjs/unnamed-chunk-6_421ca0fd2173e9f57b63b42a7adbf7e0">
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="1|2|3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">h2o.init</span>()</span>
+<span id="cb17-2"><a href="#cb17-2"></a></span>
+<span id="cb17-3"><a href="#cb17-3"></a>aml <span class="ot">&lt;-</span> <span class="fu">h2o.automl</span>(<span class="at">x =</span> x, <span class="co"># predictors</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>                  <span class="at">y =</span> y, <span class="co"># target</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>                  <span class="at">training_frame =</span> train) <span class="co"># training data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="footer">
+<p>Learn more: <a href="https://docs.h2o.ai/h2o/latest-stable/h2o-r/docs/reference/h2o.automl.html" target="_blank">h2o.automl()</a></p>
+</div>
+</section>
+<section id="run-automl-1" class="slide level2">
+<h2>Run AutoML</h2>
+<p>More advanced example:</p>
+<div class="cell" data-hash="automl_workshop_slides_cache/revealjs/unnamed-chunk-7_2941b8edeba0c7c6f4d9889b131e0e34">
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="4|5|6|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">h2o.init</span>()</span>
+<span id="cb18-2"><a href="#cb18-2"></a></span>
+<span id="cb18-3"><a href="#cb18-3"></a>aml <span class="ot">&lt;-</span> <span class="fu">h2o.automl</span>(<span class="at">x =</span> x, <span class="co"># predictors</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>                  <span class="at">y =</span> y, <span class="co"># target</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a>                  <span class="at">training_frame =</span> train, <span class="co"># training data</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a>                  <span class="at">max_runtime_secs =</span> <span class="dv">10</span>, <span class="co"># define runtime</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a>                  <span class="at">max_models =</span> <span class="dv">20</span>, <span class="co"># define max number of models to be trained</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a>                  <span class="at">exclude_algos =</span> <span class="fu">c</span>(<span class="st">"GLM"</span>, <span class="st">"DeepLearning"</span>), <span class="co"># excluding specific algos</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a>                  <span class="at">include_algos =</span> <span class="cn">NULL</span>, <span class="co"># including specific algos</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a>                  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="footer">
+<p>Learn more: <a href="https://docs.h2o.ai/h2o/latest-stable/h2o-r/docs/reference/h2o.automl.html" target="_blank">h2o.automl()</a></p>
+</div>
+</section>
+<section id="get-the-leaderboard" class="slide level2">
+<h2>Get the leaderboard</h2>
+<div class="cell" data-hash="automl_workshop_slides_cache/revealjs/unnamed-chunk-8_9bcc076c519e65ddc54bde51cd4d217c">
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="1|2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">h2o.init</span>()</span>
+<span id="cb19-2"><a href="#cb19-2"></a></span>
+<span id="cb19-3"><a href="#cb19-3"></a>lb <span class="ot">&lt;-</span> <span class="fu">h2o.get_leaderboard</span>(aml)</span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="fu">h2o.head</span>(lb, <span class="at">n =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="make-predictions-with-best-model" class="slide level2">
+<h2>Make predictions with best model</h2>
+<div class="cell" data-hash="automl_workshop_slides_cache/revealjs/unnamed-chunk-9_ab883b0029e6f56b0894eb3a453cf8e9">
+<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="1|3-4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">h2o.init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Connection successful!
+
+R is connected to the H2O cluster: 
+    H2O cluster uptime:         1 hours 31 minutes 
+    H2O cluster timezone:       Europe/Zurich 
+    H2O data parsing timezone:  UTC 
+    H2O cluster version:        3.42.0.3 
+    H2O cluster version age:    7 days, 3 hours and 56 minutes 
+    H2O cluster name:           H2O_started_from_R_luca_qxb001 
+    H2O cluster total nodes:    1 
+    H2O cluster total memory:   4.92 GB 
+    H2O cluster total cores:    8 
+    H2O cluster allowed cores:  8 
+    H2O cluster healthy:        TRUE 
+    H2O Connection ip:          localhost 
+    H2O Connection port:        54321 
+    H2O Connection proxy:       NA 
+    H2O Internal Security:      FALSE 
+    R Version:                  R version 4.2.2 Patched (2022-11-10 r83330) </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="1|3-4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>aml_cl_test_perf <span class="ot">&lt;-</span> <span class="fu">h2o.performance</span>(aml<span class="sc">@</span>leader, test)</span>
+<span id="cb22-2"><a href="#cb22-2"></a></span>
+<span id="cb22-3"><a href="#cb22-3"></a>aml_cl_test_perf <span class="sc">|&gt;</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a>  <span class="fu">h2o.confusionMatrix</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["setosa"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["versicolor"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["virginica"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Error"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Rate"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"7","2":"0","3":"0","4":"0.00000000","5":"0 / 7","_rn_":"setosa"},{"1":"0","2":"13","3":"0","4":"0.00000000","5":"0 / 13","_rn_":"versicolor"},{"1":"0","2":"1","3":"10","4":"0.09090909","5":"1 / 11","_rn_":"virginica"},{"1":"7","2":"14","3":"10","4":"0.03225806","5":"1 / 31","_rn_":"Totals"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
 
 
-<img src="figures/afds_logo.png" class="slide-logo r-stretch"><div class="footer footer-default">
+<img src="figures/BL_Logo_FKD_AfDuS_A_r_rgb.png" class="slide-logo r-stretch"><div class="footer footer-default">
 
 </div>
 </section></section>
@@ -636,6 +1130,44 @@ Luca Hüsler
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
