@@ -73,9 +73,9 @@ Run the following on your Droplet:
 
 `sudo apt update`
 
-`sudo apt install docker.io` 
+`sudo apt install docker.io`
 
-`sudo systemctl start docker` 
+`sudo systemctl start docker`
 
 `sudo systemctl enable docker`
 
@@ -83,7 +83,7 @@ Run the following on your Droplet:
 
 `docker pull lucahuesler/rstudio-h2o:latest`
 
-`docker run -d -p 8787:8787 -e PASSWORD=sst2023 lucahuesler/rstudio-h2o:latest`
+`docker run -d -p 8787:8787 -e PASSWORD=your_desired_password lucahuesler/rstudio-h2o:latest`
 
 Replace `your_desired_password` with the password you want users to use for RStudio.
 

@@ -242,7 +242,6 @@ Transform your data to a h2o dataframe:
 h2o.init()
 ```
 
-
 ```{r}
 #| echo: true
 #| eval: true
@@ -259,6 +258,7 @@ iris.h2o <- as.h2o(iris)
 Similar to an R dataframe, but it is located in the H2O cluster, not in memory.
 
 ## Prepare the data
+
 ```{r}
 #| results: hide
 h2o.init()
@@ -319,6 +319,7 @@ x <- setdiff(colnames(iris.h2o), y)
 :::
 
 ## Run AutoML
+
 ```{r}
 #| results: hide
 h2o.init()
